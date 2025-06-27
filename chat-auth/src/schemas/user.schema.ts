@@ -1,8 +1,5 @@
 import zod from "zod";
-
 export const userSchema = zod.object({
-  name: zod.string(),
+  username: zod.string(),
   password: zod.string().min(8, { message: "password too short" }),
 });
-
-

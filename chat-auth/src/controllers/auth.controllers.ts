@@ -4,8 +4,8 @@ import { userSchema } from "../schemas/user.schema";
 import { Request, Response } from "express";
 
 const signup = async (req: any, res: any) => {
-  const { username, password } = req.body;
   try {
+    const { username, password } = req.body;
     const result = userSchema.safeParse({ username, password });
     if (result.success) {
       const hashedPassword = await bcrypt.hash(password, 10);

@@ -8,10 +8,10 @@ const PORT = process.env.PORT || 6000;
 
 const app = express();
 app.use(express.json());
-connection();
 
 app.use("/auth", authRouter);
 
 app.listen(PORT, () => {
+  connection();
   console.log("listening on port : ", PORT);
 });
