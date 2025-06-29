@@ -1,25 +1,34 @@
 "use client";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { useEffect, useState } from "react";
 
+type Message = {
+  receiver: boolean;
+  msg: string;
+};
+
 export default function Chat() {
-  const [msg, setMsg] = useState<String>("");
-  const [msgs, setMsgs] = useState<String[]>([]);
-  const [socket, setSocket] = useState<any>();
+  const [msg, setMsg] = useState<string>("");
+  const [msgs, setMsgs] = useState<Message[]>([]);
+  const [socket, setSocket] = useState<Socket | null>();
 
   useEffect(() => {
     const newSocket = io("http://localhost:8080/");
     setSocket(newSocket);
+
+    newSocket.on("chat msg", (message) => {
+      setMsgs((prevMsg) => [...prevMsg, message]);
+    });
     return () => {
-      newSocket.close();
+      newSocket.disconnect();
     };
   }, []);
 
   function sendMsg(e: React.FormEvent) {
     e.preventDefault();
     if (socket) {
-      socket.emit("message", msg);
-      setMsgs([...msgs, msg]);
+      socket.emit("chat msg", { receiver: false, msg });
+      setMsgs((prevMsg) => [...prevMsg, { receiver: false, msg }]);
       setMsg("");
     }
   }
@@ -27,9 +36,18 @@ export default function Chat() {
   return (
     <div>
       <div className="msgs-container">
-        {msgs.map((msg, index) => (
-          <div key={index} className="msg text-right m-5">
-            {msg}
+        {msgs.map((message, index) => (
+          <div
+            key={index}
+            className={`mt-4 ${message.receiver ? "text-left " : "text-right"}`}
+          >
+            <span
+              className={`rounded-2xl p-2 ${
+                message.receiver ? "bg-gray-600" : "bg-green-600"
+              }`}
+            >
+              {message.msg}
+            </span>
           </div>
         ))}
       </div>

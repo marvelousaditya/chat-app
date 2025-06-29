@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { User } from "../models/user.model";
 import { userSchema } from "../schemas/user.schema";
 import { Request, Response } from "express";
+import generateJwtAndSetCookie from "../utils/generateToken";
 
 const signup = async (req: any, res: any) => {
   try {
@@ -11,12 +12,13 @@ const signup = async (req: any, res: any) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const userExists = await User.findOne({ username });
       if (userExists) {
-        return res.status(409).json({ msg: "username in use" });
+        return res.json({ msg: "username in use" });
       } else {
         const createUser = await User.create({
           username,
           password: hashedPassword,
         });
+        generateJwtAndSetCookie(createUser._id, res);
         res.status(201).json({ msg: "account created" });
       }
     } else {
