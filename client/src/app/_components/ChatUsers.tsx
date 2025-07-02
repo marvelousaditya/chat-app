@@ -9,7 +9,7 @@ function ChatUsers() {
   const { receiver, updateReceiver } = useChatReceiver();
   const { authName } = useAuthStore();
   const { users } = useUsersStore();
-  const { updateChatMsgs } = useChatMsgsStore();
+  const { chatMsgs, updateChatMsgs } = useChatMsgsStore();
   useEffect(() => {
     const getMsgs = async () => {
       try {
@@ -20,9 +20,10 @@ function ChatUsers() {
           },
           withCredentials: true,
         });
-        console.log(res.data.msgs);
         if (res.data.length != 0) {
-          updateChatMsgs(res.data.msgs);
+          console.log(res.data);
+          updateChatMsgs(res.data);
+          console.log(chatMsgs);
         } else {
           updateChatMsgs([]);
         }

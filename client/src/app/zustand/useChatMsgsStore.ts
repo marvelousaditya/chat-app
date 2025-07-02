@@ -1,18 +1,19 @@
 import { create } from "zustand";
 
-type msgs = {
+type Msg = {
   msg: string;
   sender: string;
   receiver: string;
-  createdAt: Date;
+  _id: string;
+  createdAt: string;
 };
 
-type ChatMsgs = {
-  chatMsgs: msgs[];
-  updateChatMsgs: (chatMsgs: msgs[]) => void;
+type ChatMsgsStore = {
+  chatMsgs: Msg[];
+  updateChatMsgs: (chatMsgs: Msg[]) => void;
 };
 
-export const useChatMsgsStore = create<ChatMsgs>((set) => ({
+export const useChatMsgsStore = create<ChatMsgsStore>((set) => ({
   chatMsgs: [],
-  updateChatMsgs: (chatMsgs) => set({ chatMsgs: chatMsgs }),
+  updateChatMsgs: (chatMsgs) => set({ chatMsgs }),
 }));
