@@ -6,7 +6,7 @@ import cors from "cors";
 import { connect } from "http2";
 import connectToMongoDb from "./db/connectToMongoDb";
 const app = express();
-const server = http.createServer(http);
+const server = http.createServer(app);
 import { addMsgsToConversation } from "./controllers/msgs.controllers";
 import msgRouter from "./routes/msgs.routes";
 dotenv.config();
