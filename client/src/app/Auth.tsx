@@ -3,22 +3,31 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuthStore } from "./zustand/useAuthStore";
 
 export default function Auth() {
   const router = useRouter();
+  const { updateAuthName } = useAuthStore();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   async function signup(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/signup", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/auth/signup",
+        {
+          username,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       if (response.data.msg === "username in use") {
         alert("username already exists");
       } else {
-        router.push("/chat");
+        updateAuthName(username);
+        router.replace("/chat");
       }
     } catch (err: any) {
       console.log("an error occured : ", err.message);
@@ -28,14 +37,19 @@ export default function Auth() {
   async function login(event: React.MouseEvent<HTMLElement>) {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/auth/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
       if (response.data.msg === "username doesn't exist") {
         alert("username doesn't exist");
       } else {
-        router.push("/chat");
+        updateAuthName(username);
+        router.replace("/chat");
       }
     } catch (err: any) {
       console.log("an error occured : ", err.message);
