@@ -27,7 +27,7 @@ export default function Chat() {
     }
   }
   useEffect(() => {
-    const newSocket = io("http://localhost:8080/", {
+    const newSocket = io("http://localhost:8081/", {
       query: {
         username: authName,
       },

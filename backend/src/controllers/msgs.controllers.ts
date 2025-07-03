@@ -19,7 +19,6 @@ export const addMsgsToConversation = async (
     if (!convs) convs = await conversation.create({ users: participants });
     convs.msgs.push(msg);
     await convs.save();
-    // return res.status(200).json(convs);
   } catch (err: any) {
     console.log("error : ", err.message);
   }
@@ -27,8 +26,7 @@ export const addMsgsToConversation = async (
 
 export const getMsgsForConversation = async (req: any, res: any) => {
   try {
-    const { sender, receiver } = req.query;
-    console.log(sender, receiver);
+    const { sender, receiver } = req.query;  
     const convs = await conversation.findOne({
       users: { $all: [sender, receiver] },
     });
